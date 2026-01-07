@@ -1,13 +1,16 @@
 ﻿// admin/supabase-config.js
 
-// إعدادات مشروع Supabase الخاص بك
-const SUPABASE_URL = 'https://ifyprnnmswppurgitgtc.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_J_pBXSB20JpGpM10vn7W1Q_wZD4mTox';
+// 1. إعدادات مشروع Supabase الخاص بك
+const SB_URL = 'https://ifyprnnmswppurgitgtc.supabase.co';
+const SB_KEY = 'sb_publishable_J_pBXSB20JpGpM10vn7W1Q_wZD4mTox';
 
-// إنشاء العميل (Client) مرة واحدة وتصديره ليستخدم في كل مكان
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// 2. إنشاء العميل باسم مختلف (مثلاً supabaseClient) لتجنب التضارب مع المكتبة الأصلية
+const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 
-// وظيفة مساعدة للتحقق من الجلسة (اختياري)
+// 3. جعل العميل متاحاً عالمياً تحت اسم 'db' أو استخدامه مباشرة
+window.supabaseDB = supabaseClient;
+
+// وظيفة مساعدة للتحقق من الجلسة
 function checkSession() {
     const session = JSON.parse(localStorage.getItem('al_furqan_session'));
     if (!session || new Date().getTime() > session.expires) {
