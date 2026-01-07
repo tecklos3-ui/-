@@ -126,3 +126,20 @@ function handleLogout() {
     localStorage.removeItem('al_furqan_session');
     window.location.href = 'login.html';
 }
+function showUserSubTab(subTabId) {
+    // إخفاء كل المحتويات الداخلية للمستخدمين
+    document.querySelectorAll('.user-sub-tab').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    
+    // إزالة التحديد عن الأزرار
+    document.querySelectorAll('.user-menu-item').forEach(item => {
+        item.classList.remove('active');
+    });
+
+    // إظهار المحتوى المختار
+    document.getElementById(subTabId).classList.add('active');
+    
+    // إضافة تحديد للزر الذي تم الضغط عليه
+    event.currentTarget.classList.add('active');
+}
