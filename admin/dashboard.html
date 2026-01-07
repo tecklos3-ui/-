@@ -1,200 +1,57 @@
 ﻿<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة تحكم الفرقان</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="dashboard-style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>الفرقان — لوحة التحكم</title>
+
+    <link rel="stylesheet" href="style.css" />
+
 </head>
+
 <body>
 
-    <aside class="sidebar">
-        <div class="brand"><span>لوحة الفرقان</span></div>
-        <ul class="nav-links">
-            <li class="nav-item active" onclick="switchTab('dashboard')">
-                <span>📊</span> <span>نظرة عامة</span>
-            </li>
-            <li class="nav-item" onclick="switchTab('products')">
-                <span>📱</span> <span>إدارة المنتجات</span>
-            </li>
-            <li class="nav-item" onclick="switchTab('offers')">
-                <span>🔔</span> <span>شريط العروض</span>
-            </li>
-            <li class="nav-item" onclick="switchTab('users-section')">
-                <span>👥</span> <span>المستخدمين</span>
-            </li>
-            <li class="nav-item" onclick="switchTab('settings')">
-                <span>⚙️</span> <span>الإعدادات</span>
-            </li>
-            <li class="nav-item" style="margin-top: auto; color: var(--danger-color);" onclick="handleLogout()">
-                <span>🚪</span> <span>خروج</span>
-            </li>
-        </ul>
-    </aside>
+    <header class="topbar">
+        <div class="logo">الفرقان</div>
 
-    <main class="main-content">
-        <div class="header">
-            <div class="page-title">
-                <h2 id="pageTitle">نظرة عامة</h2>
-                <p style="color: var(--text-muted)">أهلاً بك <span id="adminName">جاري التحميل...</span></p>
-            </div>
-            <div class="user-profile">
-                <img src="https://ui-avatars.com/api/?name=Admin&background=6c5ce7&color=fff" id="adminAvatar">
-                <span style="font-weight:bold;" id="adminRoleHeader">المدير</span>
-            </div>
+        <div class="user-box">
+            مرحباً، <span id="username">—</span>
         </div>
+    </header>
 
-        <div id="users-section" class="section">
-            <div class="users-container" style="display: flex; gap: 30px; align-items: flex-start;">
+    <div class="layout">
 
-                <div class="users-menu" style="width: 220px; background: var(--card-bg); border-radius: 15px; padding: 15px; height: fit-content;">
-                    <div class="user-menu-item active" onclick="showUserSubTab('user-list')">👥 قائمة الفريق</div>
-                    <div class="user-menu-item" onclick="showUserSubTab('user-permissions')">🔐 الصلاحيات</div>
-                    <div class="user-menu-item" onclick="showUserSubTab('user-reports')">📊 تقارير الأداء</div>
-                    <div class="user-menu-item" onclick="showUserSubTab('user-add')" style="margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; color: var(--accent-color);">➕ إضافة موظف</div>
-                </div>
+        <aside class="sidebar">
+            <button onclick="loadPage('home')">الرئيسية</button>
+            <button onclick="loadPage('users')">المستخدمين</button>
+        </aside>
 
-                <div class="users-content" style="flex: 1;">
-
-                    <div id="user-list" class="user-sub-tab active">
-                        <div class="table-container">
-                            <h3 style="margin-bottom:1.5rem;">إدارة فريق العمل</h3>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>الموظف</th>
-                                        <th>الصلاحية</th>
-                                        <th>الحالة</th>
-                                        <th>إجراءات</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="usersTableBody">
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div id="user-add" class="user-sub-tab">
-                        <div class="table-container" style="max-width: 500px;">
-                            <h3 style="margin-bottom:1.5rem;">إنشاء حساب جديد</h3>
-                            <div class="form-group">
-                                <label>الاسم الكامل</label>
-                                <input type="text" id="newUserName" placeholder="اسم الموظف الثلاثي">
-                            </div>
-                            <div class="form-group">
-                                <label>البريد الإلكتروني</label>
-                                <input type="email" id="newUserEmail" placeholder="email@example.com">
-                            </div>
-                            <div class="form-group">
-                                <label>كلمة المرور</label>
-                                <input type="password" id="newUserPass" placeholder="*******">
-                            </div>
-                            <div class="form-group">
-                                <label>نوع الصلاحية</label>
-                                <select id="newUserRole">
-                                    <option value="editor">محرر (منتجات فقط)</option>
-                                    <option value="admin">مدير نظام</option>
-                                </select>
-                            </div>
-                            <button class="btn btn-primary" onclick="handleCreateStaff()" style="width: 100%;">إنشاء حساب الموظف</button>
-                        </div>
-                    </div>
-
-                    <div id="user-permissions" class="user-sub-tab">
-                        <div class="table-container"><h3>إعدادات الوصول</h3><p>قريباً: تخصيص صلاحيات كل موظف بشكل دقيق.</p></div>
-                    </div>
-                    <div id="user-reports" class="user-sub-tab">
-                        <div class="table-container"><h3>إحصائيات الإنجاز</h3><p>عرض عدد المنتجات والعروض التي أضافها كل موظف.</p></div>
-                    </div>
-
-                </div>
+        <main class="content">
+            <div id="page-content">
+                👋 اختر من القائمة
             </div>
-        </div>
+        </main>
 
-        <div id="dashboard" class="section active">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>المنتجات</h3>
-                    <div class="stat-number" id="totalProductsCount">0</div>
-                    <p style="color: var(--accent-color)">جهاز متوفر</p>
-                </div>
-                <div class="stat-card">
-                    <h3>العروض</h3>
-                    <div class="stat-number" id="totalOffersCount">0</div>
-                    <p style="color: var(--primary-color)">عرض نشط</p>
-                </div>
-                <div class="stat-card">
-                    <h3>الفريق</h3>
-                    <div class="stat-number" id="totalStaffCount">0</div>
-                    <p>موظف مسجل</p>
-                </div>
-            </div>
-
-            <div class="table-container">
-                <h3 style="margin-bottom:1rem;">آخر النشاطات</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>الصورة</th>
-                            <th>الاسم</th>
-                            <th>السعر</th>
-                            <th>الحالة</th>
-                        </tr>
-                    </thead>
-                    <tbody id="recentProductsTable"></tbody>
-                </table>
-            </div>
-        </div>
-
-        <div id="products" class="section">
-            <div style="display:flex; justify-content:space-between; margin-bottom:1.5rem;">
-                <h3>قائمة المنتجات الحالية</h3>
-                <button class="btn btn-primary" onclick="openProductModal()">+ إضافة جهاز جديد</button>
-            </div>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>صورة</th>
-                            <th>اسم الجهاز</th>
-                            <th>السعر</th>
-                            <th>إجراءات</th>
-                        </tr>
-                    </thead>
-                    <tbody id="productsTableBody"></tbody>
-                </table>
-            </div>
-        </div>
-
-    </main>
-
-    <div class="modal" id="productModal">
-        <div class="modal-content">
-            <h3 style="margin-bottom:1.5rem; color:var(--primary-color);">بيانات المنتج الجديد</h3>
-            <div class="form-group">
-                <label>اسم الجهاز</label>
-                <input type="text" id="pName" placeholder="مثال: iPhone 15 Pro">
-            </div>
-            <div class="form-group">
-                <label>السعر</label>
-                <input type="text" id="pPrice" placeholder="مثال: $999">
-            </div>
-            <div class="form-group">
-                <label>رابط الصورة المباشر</label>
-                <input type="text" id="pImage" placeholder="https://image-url.com/img.jpg">
-            </div>
-            <div style="display:flex; gap:10px; margin-top:1.5rem;">
-                <button class="btn btn-primary" onclick="saveProductToSupabase()">حفظ المنتج</button>
-                <button class="btn" style="background:#333; color:#fff;" onclick="closeProductModal()">إلغاء</button>
-            </div>
-        </div>
     </div>
 
-    <div id="toast">تم تنفيذ العملية بنجاح</div>
+    <script>
+        /* 👉 اسم المستخدم من التخزين */
+        const currentUser = JSON.parse(localStorage.getItem("al_furqan_user")) || { name: "مدير" };
+        document.getElementById("username").innerText = currentUser.name;
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabase-config.js"></script>
-    <script src="dashboard-script.js"></script>
+        /* 👉 تحميل الصفحات */
+        function loadPage(page) {
+            if (page === "users") {
+                fetch("users.html")
+                    .then(r => r.text())
+                    .then(html => document.getElementById("page-content").innerHTML = html);
+            }
+
+            if (page === "home") {
+                document.getElementById("page-content").innerHTML = "مرحباً بك في لوحة التحكم ✨";
+            }
+        }
+    </script>
+
 </body>
 </html>
