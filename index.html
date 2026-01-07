@@ -3,645 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الفرقان للموبايل</title>
+    <title>الفرقان للموبايل | أحدث الهواتف والصيانة</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;700;900&display=swap" rel="stylesheet">
-    
-    <style>
-        /* --- المتغيرات والتأسيس --- */
-        :root {
-            --primary-color: #6c5ce7;
-            --secondary-color: #a29bfe;
-            --accent-color: #00cec9;
-            --ticker-bg: #2d0a0a;
-            --ticker-text: #ff7675;
-            --whatsapp-color: #25D366;
-            --dark-bg: #0f0f15;
-            --card-bg: #1e1e26;
-            --text-color: #ffffff;
-            --text-muted: #b2bec3;
-            --gradient: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-            --shadow: 0 10px 30px rgba(0,0,0,0.5);
-            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Tajawal', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background-color: var(--dark-bg);
-            color: var(--text-color);
-            overflow-x: hidden;
-            line-height: 1.6;
-            padding-top: 110px; 
-        }
-
-        a { text-decoration: none; color: inherit; }
-        ul { list-style: none; }
-        button { border: none; outline: none; cursor: pointer; font-family: inherit; }
-
-        /* --- 1. شريط الأخبار المتحرك --- */
-        .news-ticker {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 40px;
-            background: linear-gradient(90deg, #2d0a0a, #1a0505);
-            display: flex;
-            align-items: center;
-            overflow: hidden;
-            z-index: 2000;
-            border-bottom: 1px solid #ff7675;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
-        }
-
-        .ticker-label {
-            background: #ff7675;
-            color: #fff;
-            padding: 0 15px;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            font-weight: bold;
-            font-size: 0.9rem;
-            z-index: 2;
-            white-space: nowrap;
-        }
-
-        .ticker-content {
-            display: flex;
-            white-space: nowrap;
-            animation: ticker-scroll 25s linear infinite;
-        }
-
-        .ticker-item {
-            display: inline-flex;
-            align-items: center;
-            padding: 0 2rem;
-            font-size: 0.95rem;
-            color: #fab1a0;
-        }
-        
-        .ticker-item span {
-            color: #ffeaa7;
-            margin-left: 5px;
-            font-weight: bold;
-        }
-
-        @keyframes ticker-scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-100%); }
-        }
-
-        /* --- 2. Header --- */
-        header {
-            position: fixed;
-            top: 40px;
-            width: 100%;
-            padding: 1rem 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(15, 15, 21, 0.9);
-            backdrop-filter: blur(15px);
-            z-index: 1000;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            transition: top 0.3s;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 900;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -1px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        .nav-links a {
-            font-weight: 500;
-            transition: var(--transition);
-            position: relative;
-        }
-
-        .nav-links a:hover {
-            color: var(--primary-color);
-        }
-
-        .btn-login {
-            padding: 0.5rem 1.5rem;
-            background: transparent;
-            border: 2px solid var(--primary-color);
-            color: var(--text-color);
-            border-radius: 50px;
-            font-weight: bold;
-            transition: var(--transition);
-            overflow: hidden;
-            position: relative;
-            z-index: 1;
-        }
-
-        .btn-login::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 0%;
-            height: 100%;
-            background: var(--gradient);
-            z-index: -1;
-            transition: var(--transition);
-        }
-
-        .btn-login:hover::before {
-            width: 100%;
-        }
-
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-        }
-
-        .hamburger span {
-            width: 25px;
-            height: 3px;
-            background: #fff;
-            border-radius: 2px;
-        }
-
-        /* --- Hero Section --- */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 10%;
-            padding-top: 0; 
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-content {
-            flex: 1;
-            z-index: 2;
-            animation: slideRight 1s ease-out;
-        }
-
-        .hero-title {
-            font-size: 4.5rem;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-            font-weight: 900;
-        }
-
-        .hero-title span {
-            color: var(--primary-color);
-        }
-
-        .hero-desc {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            margin-bottom: 2rem;
-            max-width: 500px;
-        }
-
-        .cta-btn {
-            display: inline-block;
-            padding: 1rem 2.5rem;
-            background: var(--gradient);
-            color: #fff;
-            border-radius: 50px;
-            font-weight: bold;
-            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.4);
-            transition: var(--transition);
-        }
-
-        .cta-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(108, 92, 231, 0.6);
-        }
-
-        .hero-image {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            z-index: 2;
-        }
-
-        .phone-mockup {
-            width: 320px;
-            height: 640px;
-            background: #000;
-            border-radius: 45px;
-            border: 10px solid #333;
-            position: relative;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
-            animation: float 6s ease-in-out infinite;
-            overflow: hidden;
-        }
-
-        .phone-screen {
-            width: 100%;
-            height: 100%;
-            background: url('https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=800&auto=format&fit=crop') center/cover;
-        }
-
-        /* --- معرض الهواتف --- */
-        .gallery {
-            padding: 5rem 10%;
-            background: var(--card-bg);
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-        
-        .section-header h2 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 2rem;
-        }
-
-        .product-card {
-            background: var(--dark-bg);
-            border-radius: 20px;
-            overflow: hidden;
-            position: relative;
-            transition: var(--transition);
-            opacity: 0;
-            transform: translateY(30px);
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .product-card.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .product-card:hover {
-            transform: scale(1.03);
-            box-shadow: 0 15px 30px rgba(108, 92, 231, 0.2);
-        }
-
-        .product-img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-        }
-
-        .product-info {
-            padding: 1.5rem;
-        }
-
-        .product-title {
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .product-price {
-            color: var(--primary-color);
-            font-weight: bold;
-            font-size: 1.3rem;
-        }
-
-        .btn-buy {
-            width: 100%;
-            padding: 0.8rem;
-            margin-top: 1rem;
-            background: var(--gradient);
-            color: #fff;
-            border-radius: 10px;
-            font-weight: bold;
-            transition: var(--transition);
-        }
-
-        .btn-buy:hover { opacity: 0.9; }
-
-        /* --- موقع المحل --- */
-        .location {
-            padding: 5rem 10%;
-            text-align: center;
-            background: linear-gradient(to bottom, var(--dark-bg), #15151a);
-        }
-
-        .location-card {
-            background: var(--card-bg);
-            padding: 3rem;
-            border-radius: 20px;
-            display: inline-block;
-            max-width: 600px;
-            width: 100%;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .location-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            display: block;
-        }
-
-        .map-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 1.5rem;
-            padding: 1rem 2rem;
-            background: #fff;
-            color: #000;
-            border-radius: 50px;
-            font-weight: bold;
-            transition: var(--transition);
-        }
-
-        .map-btn:hover {
-            background: var(--accent-color);
-            color: #fff;
-        }
-
-        /* --- قسم التواصل --- */
-        .contact {
-            padding: 5rem 10%;
-            text-align: center;
-        }
-
-        .contact-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .contact-btn {
-            flex: 1;
-            min-width: 280px;
-            max-width: 400px;
-            padding: 2rem;
-            border-radius: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-            text-decoration: none;
-            transition: var(--transition);
-            border: 1px solid transparent;
-        }
-
-        .btn-whatsapp {
-            background: rgba(37, 211, 102, 0.1);
-            border-color: var(--whatsapp-color);
-            color: var(--whatsapp-color);
-        }
-
-        .btn-whatsapp:hover {
-            background: var(--whatsapp-color);
-            color: #fff;
-            transform: translateY(-5px);
-        }
-
-        .btn-call {
-            background: rgba(108, 92, 231, 0.1);
-            border-color: var(--primary-color);
-            color: var(--primary-color);
-        }
-
-        .btn-call:hover {
-            background: var(--primary-color);
-            color: #fff;
-            transform: translateY(-5px);
-        }
-
-        /* --- زر واتس أب العائم --- */
-        .float-wa {
-            position: fixed;
-            bottom: 30px;
-            left: 30px;
-            background-color: var(--whatsapp-color);
-            color: #FFF;
-            border-radius: 50px;
-            text-align: center;
-            font-size: 30px;
-            box-shadow: 2px 2px 3px #999;
-            z-index: 2000;
-            width: 60px;
-            height: 60px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: var(--transition);
-        }
-
-        .float-wa:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 15px var(--whatsapp-color);
-        }
-
-        /* --- Modal & Toast --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 3000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            backdrop-filter: blur(5px);
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .login-box {
-            background: var(--card-bg);
-            padding: 3rem;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 400px;
-            position: relative;
-            transform: scale(0.8);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .modal-overlay.active .login-box {
-            transform: scale(1);
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            font-size: 1.5rem;
-            color: var(--text-muted);
-            cursor: pointer;
-        }
-
-        .login-box h3 {
-            text-align: center;
-            margin-bottom: 2rem;
-            font-size: 1.8rem;
-            color: var(--primary-color);
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 0.8rem;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 8px;
-            color: #fff;
-            transition: 0.3s;
-        }
-
-        .form-group input:focus {
-            border-color: var(--primary-color);
-            background: rgba(0,0,0,0.5);
-        }
-
-        .btn-submit {
-            width: 100%;
-            padding: 1rem;
-            background: var(--gradient);
-            color: #fff;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 1rem;
-            transition: 0.3s;
-        }
-
-        .btn-submit:hover { opacity: 0.9; }
-
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: var(--card-bg);
-            color: #fff;
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border: 1px solid var(--accent-color);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            z-index: 4000;
-        }
-
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
-        }
-
-        /* --- Animations --- */
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-
-        @keyframes slideRight {
-            from { transform: translateX(50px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        /* --- Responsive --- */
-        @media (max-width: 768px) {
-            body { padding-top: 90px; }
-            header { top: 40px; padding: 0.8rem 5%; }
-            .hero {
-                flex-direction: column-reverse;
-                text-align: center;
-                justify-content: center;
-                padding-top: 20px;
-            }
-
-            .hero-title { font-size: 2.8rem; }
-            .hero-desc { margin: 0 auto 2rem auto; }
-            
-            .nav-links {
-                position: fixed;
-                top: 40px;
-                right: -100%;
-                width: 100%;
-                height: calc(100vh - 40px);
-                background: var(--dark-bg);
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                transition: 0.4s ease;
-            }
-
-            .nav-links.active { right: 0; }
-            .hamburger { display: flex; }
-
-            .phone-mockup {
-                width: 200px;
-                height: 400px;
-                margin-bottom: 2rem;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- 1. شريط الأخبار المتحرك -->
     <div class="news-ticker">
         <div class="ticker-label">عروض خاصة 🔥</div>
         <div class="ticker-content">
             <div class="ticker-item">عرض خاص: <span>خصم 30% على تغيير شاشات الآيفون</span> |</div>
             <div class="ticker-item">شحن مجاني: <span>على جميع الطلبات داخل المدينة</span> |</div>
-            <div class="ticker-item">هدية مجانية: <span>غلاط زجاجي مع كل شراء هاتف جديد</span> |</div>
+            <div class="ticker-item">هدية مجانية: <span>غلاف زجاجي مع كل شراء هاتف جديد</span> |</div>
             <div class="ticker-item">أحدث الإصدارات: <span>توفر Samsung S24 Ultra الآن</span> |</div>
-            <!-- تكرار للسلاسة -->
             <div class="ticker-item">عرض خاص: <span>خصم 30% على تغيير شاشات الآيفون</span> |</div>
-            <div class="ticker-item">شحن مجاني: <span>على جميع الطلبات داخل المدينة</span> |</div>
-            <div class="ticker-item">هدية مجانية: <span>غلاط زجاجي مع كل شراء هاتف جديد</span> |</div>
-            <div class="ticker-item">أحدث الإصدارات: <span>توفر Samsung S24 Ultra الآن</span> |</div>
         </div>
     </div>
 
-    <!-- Header -->
     <header>
         <div class="logo">الفرقان</div>
         <nav>
             <ul class="nav-links" id="navLinks">
                 <li><a href="#home">الرئيسية</a></li>
-                <!-- تم إزالة رابط العروض كما طلبت -->
                 <li><a href="#gallery">المعرض</a></li>
                 <li><a href="#location">الموقع</a></li>
                 <li><a href="#contact">تواصل</a></li>
@@ -655,7 +38,6 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
     <section class="hero" id="home">
         <div class="hero-content">
             <h1 class="hero-title">الفرقان<br><span>لموبايلك</span></h1>
@@ -669,7 +51,6 @@
         </div>
     </section>
 
-    <!-- Gallery Section -->
     <section class="gallery" id="gallery">
         <div class="section-header">
             <h2>أحدث الأجهزة</h2>
@@ -710,39 +91,35 @@
         </div>
     </section>
 
-    <!-- Location Section -->
     <section class="location" id="location">
         <div class="location-card">
             <span class="location-icon">📍</span>
             <h2>موقع المتجر</h2>
-            <p style="color:var(--text-muted); margin: 10px 0;">نحن بانتظار زيارتكم في موقعنا المركزي</p>
-            <h3>سوريا - حلب</h3>
-            <p style="font-size: 0.9rem; margin-top:5px;">شارع المتنبي، مقابل ساحة الأفراح</p>
-            
-            <a href="https://www.google.com/maps/search/?api=1&query=Aleppo+Syria" target="_blank" class="map-btn">
+            <p class="text-muted">نحن بانتظار زيارتكم في موقعنا المركزي</p>
+            <h3>سوريا -حمص </h3>
+            <p>شارع الحضارة، مقابل كفترية لاروشا</p>
+            <a href="https://maps.google.com" target="_blank" class="map-btn">
                 <span>🗺️</span>
                 <span>عرض على الخريطة</span>
             </a>
         </div>
     </section>
 
-    <!-- Contact Section -->
     <section class="contact" id="contact">
         <div class="section-header">
             <h2>تواصل معنا</h2>
             <p>فريق الدعم جاهز لخدمتكم 24/7</p>
         </div>
         <div class="contact-container">
-            <a href="https://wa.me/+905057661044" target="_blank" class="contact-btn btn-whatsapp">
-                <span style="font-size: 2.5rem;">💬</span>
+            <a href="https://wa.me/00905057661044" target="_blank" class="contact-btn btn-whatsapp">
+                <span class="icon-large">💬</span>
                 <div>
                     <h3>تواصل عبر واتس أب</h3>
                     <p>00905057661044</p>
                 </div>
             </a>
-            
             <a href="tel:+963939619517" class="contact-btn btn-call">
-                <span style="font-size: 2.5rem;">📞</span>
+                <span class="icon-large">📞</span>
                 <div>
                     <h3>اتصل بنا الآن</h3>
                     <p>+963939619517</p>
@@ -752,26 +129,22 @@
     </section>
 
     <footer>
-        <p style="text-align: center; padding: 2rem; border-top: 1px solid rgba(255,255,255,0.05); color: var(--text-muted);">جميع الحقوق محفوظة © 2024 الفرقان للموبايل</p>
+        <p>جميع الحقوق محفوظة © 2024 الفرقان للموبايل</p>
     </footer>
 
-    <!-- Floating WhatsApp Button -->
-    <a href="https://wa.me/00905057661044" class="float-wa" target="_blank" title="تواصل عبر واتس أب">
-        💬
-    </a>
+    <a href="https://wa.me/00905057661044" class="float-wa" target="_blank">💬</a>
 
-    <!-- Login Modal -->
     <div class="modal-overlay" id="loginModal">
         <div class="login-box">
-            <span class="close-modal" id="closeModal">&times;</span>
+            <span class="close-modal" id="closeModal">×</span>
             <h3>تسجيل الدخول</h3>
             <form id="loginForm">
                 <div class="form-group">
-                    <label style="display:block; margin-bottom:5px; color:var(--text-muted)">البريد الإلكتروني</label>
+                    <label>البريد الإلكتروني</label>
                     <input type="email" placeholder="example@mail.com" required id="emailInput">
                 </div>
                 <div class="form-group">
-                    <label style="display:block; margin-bottom:5px; color:var(--text-muted)">كلمة المرور</label>
+                    <label>كلمة المرور</label>
                     <input type="password" placeholder="********" required id="passInput">
                 </div>
                 <button type="submit" class="btn-submit">دخول</button>
@@ -779,85 +152,11 @@
         </div>
     </div>
 
-    <!-- Toast Notification -->
     <div class="toast" id="toast">
         <span>✅</span>
         <span id="toastMessage">تمت العملية بنجاح</span>
     </div>
 
-    <script>
-        // --- 1. Navigation ---
-        const hamburger = document.getElementById('hamburger');
-        const navLinks = document.getElementById('navLinks');
-
-        hamburger.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
-
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-            });
-        });
-
-        // --- 2. Login Modal ---
-        const loginBtn = document.getElementById('loginBtnHeader');
-        const modal = document.getElementById('loginModal');
-        const closeModal = document.getElementById('closeModal');
-        const loginForm = document.getElementById('loginForm');
-        const toast = document.getElementById('toast');
-        const toastMessage = document.getElementById('toastMessage');
-
-        loginBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            if(loginBtn.innerText === "تسجيل الخروج") {
-                loginBtn.innerText = "تسجيل الدخول";
-                showToast("تم تسجيل الخروج بنجاح");
-            } else {
-                modal.classList.add('active');
-            }
-        });
-
-        closeModal.addEventListener('click', () => {
-            modal.classList.remove('active');
-        });
-
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.classList.remove('active');
-            }
-        });
-
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = document.getElementById('emailInput').value;
-            loginBtn.innerText = "تسجيل الخروج";
-            modal.classList.remove('active');
-            showToast(`مرحباً بك مجدداً! ${email}`);
-            loginForm.reset();
-        });
-
-        // --- 3. Toast & Scroll Animation ---
-        function showToast(msg) {
-            toastMessage.innerText = msg;
-            toast.classList.add('show');
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.product-card').forEach(card => {
-            observer.observe(card);
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
-
