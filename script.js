@@ -15,21 +15,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- 2. إدارة نافذة تسجيل الدخول ---
-    const loginBtn = document.getElementById('loginBtnHeader');
-    const modal = document.getElementById('loginModal');
-    const closeModal = document.getElementById('closeModal');
-    const loginForm = document.getElementById('loginForm');
-
-    loginBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        if(loginBtn.innerText === "تسجيل الخروج") {
-            loginBtn.innerText = "تسجيل الدخول";
-            showToast("تم تسجيل الخروج بنجاح");
-        } else {
-            modal.classList.add('active');
-        }
+   // التوجه لصفحة تسجيل الدخول عند الضغط على الزر
+const loginBtn = document.getElementById('loginBtnHeader');
+if (loginBtn) {
+    loginBtn.addEventListener('click', () => {
+        // تأكد من أن المسار يؤدي إلى مجلد admin حيث وضعت صفحة login.html
+        window.location.href = 'admin/login.html';
     });
+}
+
+// ميزة إضافية: إذا كان المستخدم مسجلاً دخوله بالفعل، غير نص الزر إلى "لوحة التحكم"
+window.addEventListener('DOMContentLoaded', () => {
+    const session = JSON.parse(localStorage.getItem('al_furqan_session'));
+    if (session && new Date().getTime() < session.expires) {
+        const loginBtn = document.getElementById('loginBtnHeader');
+        if (loginBtn) {
+            loginBtn.innerText = 'لوحة التحكم';
+            loginBtn.style.background = 'var(--accent-color)';
+            loginBtn.onclick = () => window.location.href = 'admin/dashboard.html';
+        }
+    }
+});
 
     closeModal.addEventListener('click', () => modal.classList.remove('active'));
 
