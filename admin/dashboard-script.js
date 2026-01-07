@@ -1,145 +1,182 @@
-﻿// admin/dashboard-script.js
-
-// 1. فحص هل المستخدم مسجل دخول أم لا
+﻿// الانتظار حتى تحميل الصفحة بالكامل
 document.addEventListener('DOMContentLoaded', () => {
-    const session = localStorage.getItem('al_furqan_session');
-    if (!session) {
-        window.location.href = 'login.html'; // طرده إذا لم يسجل دخول
-    }
-    fetchProducts(); // جلب البيانات عند التشغيل
+    checkUserSession(); // التأكد من تسجيل الدخول
+    loadAdminData();    // جلب بيانات المدير الحالي
+    fetchStats();       // جلب الإحصائيات العامة
+    fetchUsersList();   // جلب قائمة الموظفين
 });
 
-// 2. التنقل بين الأقسام
-function switchTab(tabId) {
-    document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+// --- 1. جلب بيانات المدير الحالي لتعرض في الهيدر ---
+async function loadAdminData() {
+    const { data: { user } } = await window.supabaseDB.auth.getUser();
+    if (user) {
+        // جلب الاسم والصلاحية من جدول profiles
+        const { data: profile, error } = await window.supabaseDB
+            .from('profiles')
+            .select('full_name, role')
+            .eq('id', user.id)
+            .single();
 
-    document.getElementById(tabId).classList.add('active');
-    // تحديد الزر النشط بناءً على النص أو الأيقونة (تحسين بسيط)
-    event.currentTarget.classList.add('active');
-    
-    const titles = { 'dashboard': 'نظرة عامة', 'products': 'إدارة المنتجات', 'offers': 'شريط العروض', 'settings': 'الإعدادات' };
-    document.getElementById('pageTitle').innerText = titles[tabId];
-}
+        if (profile) {
+            document.getElementById('adminName').innerText = profile.full_name;
+            document.getElementById('adminAvatar').src = `https://ui-avatars.com/api/?name=${profile.full_name}&background=6c5ce7&color=fff`;
 
-// 3. جلب المنتجات من Supabase
-async function fetchProducts() {
-    try {
-        const { data, error } = await window.supabaseDB
-            .from('products')
-            .select('*')
-            .order('created_at', { ascending: false });
-
-        if (error) throw error;
-
-        renderProducts(data);
-    } catch (err) {
-        console.error("Fetch Error:", err.message);
+            // إذا كان المستخدم ليس مديراً (admin)، يمكنك إخفاء زر "المستخدمين" منه
+            if (profile.role !== 'admin') {
+                const usersNavItem = document.querySelector('li[onclick*="users-section"]');
+                if (usersNavItem) usersNavItem.style.display = 'none';
+            }
+        }
     }
 }
 
-// 4. عرض المنتجات في الجداول
-function renderProducts(products) {
-    const tbody = document.getElementById('productsTableBody');
-    const recentBody = document.getElementById('recentProductsTable');
-    
-    tbody.innerHTML = '';
-    recentBody.innerHTML = '';
-
-    products.forEach(p => {
-        const row = `
-            <tr>
-                <td><img src="${p.img_url || 'https://via.placeholder.com/50'}" class="product-thumb"></td>
-                <td>${p.name}</td>
-                <td>${p.price}</td>
-                <td><button class="btn btn-danger" onclick="deleteProduct('${p.id}')">حذف</button></td>
-            </tr>`;
-        tbody.innerHTML += row;
-    });
-
-    // آخر 3 منتجات للرئيسية
-    products.slice(0, 3).forEach(p => {
-        recentBody.innerHTML += `
-            <tr>
-                <td><img src="${p.img_url}" class="product-thumb"></td>
-                <td>${p.name}</td>
-                <td>${p.price}</td>
-                <td><span style="color:#00ff88;">نشط</span></td>
-            </tr>`;
-    });
-
-    document.getElementById('totalProductsCount').innerText = products.length;
-}
-
-// 5. إضافة منتج جديد لـ Supabase
-async function saveProductToSupabase() {
-    const name = document.getElementById('pName').value;
-    const price = document.getElementById('pPrice').value;
-    const img = document.getElementById('pImage').value;
-    const saveBtn = document.getElementById('saveBtn');
-
-    if (!name || !price) return alert("أكمل البيانات");
-
-    saveBtn.disabled = true;
-    saveBtn.innerText = "جاري الحفظ...";
-
-    const { error } = await window.supabaseDB
-        .from('products')
-        .insert([{ name, price, img_url: img }]);
-
-    if (!error) {
-        showToast("تمت إضافة الجهاز بنجاح");
-        closeProductModal();
-        fetchProducts(); // تحديث القائمة
-    } else {
-        alert("خطأ: " + error.message);
-    }
-    
-    saveBtn.disabled = false;
-    saveBtn.innerText = "حفظ";
-}
-
-// 6. حذف منتج
-async function deleteProduct(id) {
-    if (!confirm("هل أنت متأكد من الحذف؟")) return;
-
-    const { error } = await window.supabaseDB
-        .from('products')
-        .delete()
-        .eq('id', id);
-
-    if (!error) {
-        showToast("تم الحذف بنجاح");
-        fetchProducts();
-    }
-}
-
-// أدوات المساعدة (Modals & Toasts)
-function openProductModal() { document.getElementById('productModal').classList.add('active'); }
-function closeProductModal() { document.getElementById('productModal').classList.remove('active'); }
-function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.innerText = msg; t.style.display = 'block';
-    setTimeout(() => t.style.display = 'none', 3000);
-}
-function handleLogout() {
-    localStorage.removeItem('al_furqan_session');
-    window.location.href = 'login.html';
-}
-function showUserSubTab(subTabId) {
-    // إخفاء كل المحتويات الداخلية للمستخدمين
+// --- 2. إدارة التبويبات الفرعية لقسم المستخدمين ---
+function showUserSubTab(tabId) {
+    // إخفاء كل التبويبات الفرعية
     document.querySelectorAll('.user-sub-tab').forEach(tab => {
         tab.classList.remove('active');
     });
-    
-    // إزالة التحديد عن الأزرار
+
+    // إزالة التحديد عن كل الأزرار في قائمة المستخدمين
     document.querySelectorAll('.user-menu-item').forEach(item => {
         item.classList.remove('active');
     });
 
-    // إظهار المحتوى المختار
-    document.getElementById(subTabId).classList.add('active');
-    
-    // إضافة تحديد للزر الذي تم الضغط عليه
+    // إظهار التبويب المختار
+    const targetTab = document.getElementById(tabId);
+    if (targetTab) targetTab.classList.add('active');
+
+    // تحديد الزر النشط (بناءً على الحدث)
+    if (event && event.currentTarget) {
+        event.currentTarget.classList.add('active');
+    }
+
+    // إذا تم اختيار قائمة الفريق، قم بتحديثها
+    if (tabId === 'user-list') fetchUsersList();
+}
+
+// --- 3. جلب قائمة الموظفين من قاعدة البيانات ---
+async function fetchUsersList() {
+    const tbody = document.getElementById('usersTableBody');
+    if (!tbody) return;
+
+    const { data: users, error } = await window.supabaseDB
+        .from('profiles')
+        .select('*');
+
+    if (error) {
+        console.error("Error fetching users:", error);
+        return;
+    }
+
+    tbody.innerHTML = '';
+    users.forEach(user => {
+        tbody.innerHTML += `
+            <tr>
+                <td>${user.full_name}</td>
+                <td>
+                    <select class="role-select" onchange="updateUserRole('${user.id}', this.value)" style="background:#1a1a24; color:white; border:none; padding:5px; border-radius:5px;">
+                        <option value="admin" ${user.role === 'admin' ? 'selected' : ''}>مدير</option>
+                        <option value="editor" ${user.role === 'editor' ? 'selected' : ''}>محرر</option>
+                    </select>
+                </td>
+                <td><span style="color: #00ff88;">نشط</span></td>
+                <td>
+                    <button class="btn btn-danger" onclick="deleteStaffUser('${user.id}')" style="padding: 5px 10px; font-size: 0.8rem;">حذف</button>
+                </td>
+            </tr>
+        `;
+    });
+}
+
+// --- 4. إضافة موظف جديد ---
+async function handleCreateStaff() {
+    // ملاحظة: في النسخة المجانية من Supabase، إضافة مستخدم تتطلب تسجيل خروج أو استخدام Edge Functions
+    // هنا سنقوم بإضافته لجدول الـ profiles مباشرة (كمحاكاة) أو توجيهك للطريقة الصحيحة
+    const name = document.querySelector('#user-add input[type="text"]').value;
+    const email = document.querySelector('#user-add input[type="email"]').value;
+    const password = document.querySelector('#user-add input[type="password"]').value;
+
+    if (!name || !email || !password) {
+        alert("يرجى ملء كافة الحقول");
+        return;
+    }
+
+    showToast("جاري إنشاء الحساب...");
+
+    // عملية الـ SignUp في Supabase
+    const { data, error } = await window.supabaseDB.auth.signUp({
+        email: email,
+        password: password,
+        options: {
+            data: { full_name: name, role: 'editor' }
+        }
+    });
+
+    if (error) {
+        alert("خطأ: " + error.message);
+    } else {
+        showToast("تم إضافة الموظف بنجاح! (يجب تفعيل البريد)");
+        showUserSubTab('user-list');
+    }
+}
+
+// --- 5. تحديث صلاحية المستخدم ---
+async function updateUserRole(userId, newRole) {
+    const { error } = await window.supabaseDB
+        .from('profiles')
+        .update({ role: newRole })
+        .eq('id', userId);
+
+    if (error) {
+        alert("فشل تحديث الصلاحية");
+    } else {
+        showToast("تم تحديث الصلاحية بنجاح");
+    }
+}
+
+// --- 6. حذف مستخدم ---
+async function deleteStaffUser(userId) {
+    if (!confirm("هل أنت متأكد من حذف هذا الموظف؟")) return;
+
+    const { error } = await window.supabaseDB
+        .from('profiles')
+        .delete()
+        .eq('id', userId);
+
+    if (error) {
+        alert("خطأ في الحذف");
+    } else {
+        showToast("تم حذف المستخدم");
+        fetchUsersList();
+    }
+}
+
+// --- وظائف عامة (تبديل التبويبات الرئيسية) ---
+function switchTab(tabId) {
+    document.querySelectorAll('.section').forEach(section => {
+        section.classList.remove('active');
+    });
+    document.getElementById(tabId).classList.add('active');
+
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
     event.currentTarget.classList.add('active');
+
+    const titles = {
+        'dashboard': 'نظرة عامة',
+        'products': 'إدارة المنتجات',
+        'offers': 'شريط العروض',
+        'users-section': 'إدارة المستخدمين',
+        'settings': 'الإعدادات'
+    };
+    document.getElementById('pageTitle').innerText = titles[tabId];
+}
+
+function showToast(msg) {
+    const toast = document.getElementById('toast');
+    toast.innerText = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
 }
