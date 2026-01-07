@@ -12,14 +12,24 @@
     <aside class="sidebar">
         <div class="brand"><span>لوحة الفرقان</span></div>
         <ul class="nav-links">
-            <li class="nav-item active" onclick="switchTab('dashboard')"><span>📊</span> <span>نظرة عامة</span></li>
-            <li class="nav-item" onclick="switchTab('products')"><span>📱</span> <span>إدارة المنتجات</span></li>
-            <li class="nav-item" onclick="switchTab('offers')"><span>🔔</span> <span>شريط العروض</span></li>
+            <li class="nav-item active" onclick="switchTab('dashboard')">
+                <span>📊</span> <span>نظرة عامة</span>
+            </li>
+            <li class="nav-item" onclick="switchTab('products')">
+                <span>📱</span> <span>إدارة المنتجات</span>
+            </li>
+            <li class="nav-item" onclick="switchTab('offers')">
+                <span>🔔</span> <span>شريط العروض</span>
+            </li>
             <li class="nav-item" onclick="switchTab('users-section')">
                 <span>👥</span> <span>المستخدمين</span>
             </li>
-            <li class="nav-item" onclick="switchTab('settings')"><span>⚙️</span> <span>الإعدادات</span></li>
-            <li class="nav-item" style="margin-top: auto; color: var(--danger-color);" onclick="handleLogout()"><span>🚪</span> <span>خروج</span></li>
+            <li class="nav-item" onclick="switchTab('settings')">
+                <span>⚙️</span> <span>الإعدادات</span>
+            </li>
+            <li class="nav-item" style="margin-top: auto; color: var(--danger-color);" onclick="handleLogout()">
+                <span>🚪</span> <span>خروج</span>
+            </li>
         </ul>
     </aside>
 
@@ -27,28 +37,29 @@
         <div class="header">
             <div class="page-title">
                 <h2 id="pageTitle">نظرة عامة</h2>
-                <p style="color: var(--text-muted)">أهلاً بك <span id="adminName">مدير النظام</span></p>
+                <p style="color: var(--text-muted)">أهلاً بك <span id="adminName">جاري التحميل...</span></p>
             </div>
             <div class="user-profile">
                 <img src="https://ui-avatars.com/api/?name=Admin&background=6c5ce7&color=fff" id="adminAvatar">
-                <span style="font-weight:bold;">المدير</span>
+                <span style="font-weight:bold;" id="adminRoleHeader">المدير</span>
             </div>
         </div>
-        <div id="users-section" class="section">
-            <div class="users-container" style="display: flex; gap: 20px;">
 
-                <div class="users-menu" style="width: 200px; background: var(--card-bg); border-radius: 15px; padding: 10px; height: fit-content;">
+        <div id="users-section" class="section">
+            <div class="users-container" style="display: flex; gap: 30px; align-items: flex-start;">
+
+                <div class="users-menu" style="width: 220px; background: var(--card-bg); border-radius: 15px; padding: 15px; height: fit-content;">
                     <div class="user-menu-item active" onclick="showUserSubTab('user-list')">👥 قائمة الفريق</div>
                     <div class="user-menu-item" onclick="showUserSubTab('user-permissions')">🔐 الصلاحيات</div>
                     <div class="user-menu-item" onclick="showUserSubTab('user-reports')">📊 تقارير الأداء</div>
-                    <div class="user-menu-item" onclick="showUserSubTab('user-add')">➕ إضافة موظف</div>
+                    <div class="user-menu-item" onclick="showUserSubTab('user-add')" style="margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; color: var(--accent-color);">➕ إضافة موظف</div>
                 </div>
 
                 <div class="users-content" style="flex: 1;">
 
                     <div id="user-list" class="user-sub-tab active">
                         <div class="table-container">
-                            <h3>موظفي النظام</h3>
+                            <h3 style="margin-bottom:1.5rem;">إدارة فريق العمل</h3>
                             <table>
                                 <thead>
                                     <tr>
@@ -59,51 +70,42 @@
                                     </tr>
                                 </thead>
                                 <tbody id="usersTableBody">
-                                    <tr>
-                                        <td>أحمد محمد</td>
-                                        <td><span class="badge admin">مدير</span></td>
-                                        <td><span style="color: #00ff88;">نشط</span></td>
-                                        <td><button class="btn btn-danger">حذف</button></td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
 
-                    <div id="user-permissions" class="user-sub-tab">
-                        <div class="table-container">
-                            <h3>إدارة مستويات الوصول</h3>
-                            <p style="color: var(--text-muted); margin-bottom: 1rem;">تحديد ما يمكن للمحررين القيام به.</p>
-                        </div>
-                    </div>
-
-                    <div id="user-reports" class="user-sub-tab">
-                        <div class="stats-grid">
-                            <div class="stat-card">
-                                <h4>عمليات الإضافة</h4>
-                                <div class="stat-number">45</div>
-                                <p>هذا الشهر</p>
-                            </div>
-                        </div>
-                    </div>
-
                     <div id="user-add" class="user-sub-tab">
                         <div class="table-container" style="max-width: 500px;">
-                            <h3>إضافة حساب جديد</h3>
+                            <h3 style="margin-bottom:1.5rem;">إنشاء حساب جديد</h3>
                             <div class="form-group">
                                 <label>الاسم الكامل</label>
-                                <input type="text" placeholder="اسم الموظف">
+                                <input type="text" id="newUserName" placeholder="اسم الموظف الثلاثي">
                             </div>
                             <div class="form-group">
                                 <label>البريد الإلكتروني</label>
-                                <input type="email" placeholder="email@example.com">
+                                <input type="email" id="newUserEmail" placeholder="email@example.com">
                             </div>
                             <div class="form-group">
                                 <label>كلمة المرور</label>
-                                <input type="password" placeholder="*******">
+                                <input type="password" id="newUserPass" placeholder="*******">
                             </div>
-                            <button class="btn btn-primary">إنشاء الحساب</button>
+                            <div class="form-group">
+                                <label>نوع الصلاحية</label>
+                                <select id="newUserRole">
+                                    <option value="editor">محرر (منتجات فقط)</option>
+                                    <option value="admin">مدير نظام</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-primary" onclick="handleCreateStaff()" style="width: 100%;">إنشاء حساب الموظف</button>
                         </div>
+                    </div>
+
+                    <div id="user-permissions" class="user-sub-tab">
+                        <div class="table-container"><h3>إعدادات الوصول</h3><p>قريباً: تخصيص صلاحيات كل موظف بشكل دقيق.</p></div>
+                    </div>
+                    <div id="user-reports" class="user-sub-tab">
+                        <div class="table-container"><h3>إحصائيات الإنجاز</h3><p>عرض عدد المنتجات والعروض التي أضافها كل موظف.</p></div>
                     </div>
 
                 </div>
@@ -118,19 +120,19 @@
                     <p style="color: var(--accent-color)">جهاز متوفر</p>
                 </div>
                 <div class="stat-card">
-                    <h3>العروض النشطة</h3>
+                    <h3>العروض</h3>
                     <div class="stat-number" id="totalOffersCount">0</div>
-                    <p style="color: var(--primary-color)">عرض حالياً</p>
+                    <p style="color: var(--primary-color)">عرض نشط</p>
                 </div>
                 <div class="stat-card">
-                    <h3>الحالة</h3>
-                    <div class="stat-number" style="font-size: 1.5rem; color: #00ff88;">متصل</div>
-                    <p>قاعدة البيانات</p>
+                    <h3>الفريق</h3>
+                    <div class="stat-number" id="totalStaffCount">0</div>
+                    <p>موظف مسجل</p>
                 </div>
             </div>
 
             <div class="table-container">
-                <h3 style="margin-bottom:1rem;">آخر المنتجات المضافة</h3>
+                <h3 style="margin-bottom:1rem;">آخر النشاطات</h3>
                 <table>
                     <thead>
                         <tr>
@@ -146,9 +148,9 @@
         </div>
 
         <div id="products" class="section">
-            <div style="display:flex; justify-content:space-between; margin-bottom:1rem;">
-                <h3>قائمة المنتجات</h3>
-                <button class="btn btn-primary" onclick="openProductModal()">+ إضافة منتج</button>
+            <div style="display:flex; justify-content:space-between; margin-bottom:1.5rem;">
+                <h3>قائمة المنتجات الحالية</h3>
+                <button class="btn btn-primary" onclick="openProductModal()">+ إضافة جهاز جديد</button>
             </div>
             <div class="table-container">
                 <table>
@@ -169,27 +171,27 @@
 
     <div class="modal" id="productModal">
         <div class="modal-content">
-            <h3 style="margin-bottom:1rem; color:var(--primary-color);">إضافة منتج جديد</h3>
+            <h3 style="margin-bottom:1.5rem; color:var(--primary-color);">بيانات المنتج الجديد</h3>
             <div class="form-group">
                 <label>اسم الجهاز</label>
-                <input type="text" id="pName" placeholder="مثال: iPhone 15">
+                <input type="text" id="pName" placeholder="مثال: iPhone 15 Pro">
             </div>
             <div class="form-group">
                 <label>السعر</label>
-                <input type="text" id="pPrice" placeholder="مثال: $1000">
+                <input type="text" id="pPrice" placeholder="مثال: $999">
             </div>
             <div class="form-group">
-                <label>رابط الصورة</label>
-                <input type="text" id="pImage" placeholder="https://...">
+                <label>رابط الصورة المباشر</label>
+                <input type="text" id="pImage" placeholder="https://image-url.com/img.jpg">
             </div>
-            <div style="display:flex; gap:10px; margin-top:1rem;">
-                <button class="btn btn-primary" id="saveBtn" onclick="saveProductToSupabase()">حفظ</button>
+            <div style="display:flex; gap:10px; margin-top:1.5rem;">
+                <button class="btn btn-primary" onclick="saveProductToSupabase()">حفظ المنتج</button>
                 <button class="btn" style="background:#333; color:#fff;" onclick="closeProductModal()">إلغاء</button>
             </div>
         </div>
     </div>
 
-    <div id="toast">تمت العملية بنجاح</div>
+    <div id="toast">تم تنفيذ العملية بنجاح</div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
