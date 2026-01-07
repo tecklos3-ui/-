@@ -1,43 +1,91 @@
-﻿<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+﻿<div class="card">
+    <h2>إدارة المستخدمين</h2>
 
-<head>
-    <meta charset="UTF-8">
-    <title>إدارة المستخدمين</title>
+    <button class="btn" onclick="openAddUser()">➕ إضافة مستخدم</button>
 
-    <link rel="stylesheet" href="dashboard-style.css">
+    <div class="table" id="users-table">
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabase-config.js"></script>
-    <script src="users-script.js" defer></script>
-</head>
-
-<body>
-
-    <header class="header">
-        <h1>إدارة المستخدمين</h1>
-        <button onclick="window.location.href='dashboard.html'">⬅ رجوع</button>
-    </header>
-
-    <main class="main-content">
-
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>الاسم</th>
-                        <th>الإيميل</th>
-                        <th>الصلاحية</th>
-                        <th>تاريخ الإنشاء</th>
-                    </tr>
-                </thead>
-
-                <tbody id="usersTableBody"></tbody>
-            </table>
+        <div class="table-row header">
+            <div>الاسم</div>
+            <div>الدور</div>
         </div>
 
-    </main>
+        <!-- المستخدمون -->
+    </div>
+</div>
 
-</body>
+<!-- نافذة إضافة المستخدم -->
+<div class="popup" id="addUserPopup">
+    <div class="popup-box">
+        <h3>إضافة مستخدم</h3>
 
-</html>
+        <label>اسم المستخدم</label>
+        <input type="text" id="newName" placeholder="اكتب الاسم">
+
+        <label>الدور</label>
+        <select id="newRole">
+            <option value="مدير">مدير</option>
+            <option value="موظف">موظف</option>
+        </select>
+
+        <div class="popup-actions">
+            <button onclick="saveUser()">حفظ</button>
+            <button class="cancel" onclick="closeAddUser()">إلغاء</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let users = [
+        { name: "أحمد", role: "مدير" },
+        { name: "محمد", role: "موظف" }
+    ];
+
+    function renderUsers() {
+        const table = document.getElementById("users-table");
+
+        // اترك العنوان فقط
+        table.innerHTML = `
+    <div class="table-row header">
+      <div>الاسم</div>
+      <div>الدور</div>
+    </div>
+  `;
+
+        users.forEach(u => {
+            table.innerHTML += `
+      <div class="table-row">
+        <div>${u.name}</div>
+        <div>${u.role}</div>
+      </div>
+    `;
+        });
+    }
+
+    function openAddUser() {
+        document.getElementById("addUserPopup").style.display = "flex";
+    }
+
+    function closeAddUser() {
+        document.getElementById("addUserPopup").style.display = "none";
+    }
+
+    function saveUser() {
+        const name = document.getElementById("newName").value.trim();
+        const role = document.getElementById("newRole").value;
+
+        if (name === "") {
+            alert("اكتب الاسم أولاً");
+            return;
+        }
+
+        users.push({ name, role });
+        renderUsers();
+        closeAddUser();
+
+        document.getElementById("newName").value = "";
+    }
+
+    // أول تحميل
+    renderUsers();
+</script>
