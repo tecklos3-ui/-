@@ -1,4 +1,4 @@
-:root {
+﻿:root {
     --primary-color: #6c5ce7;
     --secondary-color: #a29bfe;
     --accent-color: #00cec9;
@@ -217,3 +217,38 @@ th, td {
     border-radius: 10px;
     display: none;
 }
+/* تنسيق قائمة المستخدمين الجانبية */
+.user-menu-item {
+    padding: 12px 15px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: 0.3s;
+    color: var(--text-muted);
+}
+
+    .user-menu-item:hover, .user-menu-item.active {
+        background: var(--primary-color);
+        color: white;
+    }
+
+/* إخفاء واظهار التبويبات الداخلية */
+.user-sub-tab {
+    display: none;
+    animation: fadeIn 0.4s ease;
+}
+
+    .user-sub-tab.active {
+        display: block;
+    }
+
+.badge {
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+}
+
+    .badge.admin {
+        background: rgba(108, 92, 231, 0.2);
+        color: var(--primary-color);
+    }
