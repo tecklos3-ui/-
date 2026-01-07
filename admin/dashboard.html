@@ -1,57 +1,56 @@
 ﻿<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>الفرقان — لوحة التحكم</title>
-
-    <link rel="stylesheet" href="style.css" />
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم | الرئيسية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="dashboard-style.css">
 </head>
-
 <body>
 
-    <header class="topbar">
-        <div class="logo">الفرقان</div>
+    <aside class="sidebar">
+        <div class="brand"><span>لوحة الفرقان</span></div>
+        <ul class="nav-links">
+            <li class="nav-item active" onclick="location.href='dashboard.html'">
+                <span>📊</span> <span>الرئيسية</span>
+            </li>
+            <li class="nav-item" onclick="location.href='users.html'">
+                <span>👥</span> <span>إدارة المستخدمين</span>
+            </li>
+            <li class="nav-item" style="margin-top: auto; color: var(--danger-color);" onclick="handleLogout()">
+                <span>🚪</span> <span>تسجيل الخروج</span>
+            </li>
+        </ul>
+    </aside>
 
-        <div class="user-box">
-            مرحباً، <span id="username">—</span>
-        </div>
-    </header>
-
-    <div class="layout">
-
-        <aside class="sidebar">
-            <button onclick="loadPage('home')">الرئيسية</button>
-            <button onclick="loadPage('users')">المستخدمين</button>
-        </aside>
-
-        <main class="content">
-            <div id="page-content">
-                👋 اختر من القائمة
+    <main class="main-content">
+        <div class="header">
+            <div class="page-title">
+                <h2>لوحة الإدارة</h2>
+                <p style="color: var(--text-muted)">مرحباً بك مجدداً، <span id="adminName">جاري التحميل...</span></p>
             </div>
-        </main>
+            <div class="user-profile">
+                <img src="https://ui-avatars.com/api/?name=Admin&background=6c5ce7&color=fff" id="adminAvatar">
+            </div>
+        </div>
 
-    </div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>إجمالي المستخدمين</h3>
+                <div class="stat-number" id="totalStaffCount">0</div>
+                <p>موظف مسجل في النظام</p>
+            </div>
+            <div class="stat-card">
+                <h3>حالة الاتصال</h3>
+                <div class="stat-number" style="color: var(--accent-color); font-size: 1.5rem;">متصل الآن</div>
+                <p>قاعدة بيانات Supabase</p>
+            </div>
+        </div>
+    </main>
 
-    <script>
-        /* 👉 اسم المستخدم من التخزين */
-        const currentUser = JSON.parse(localStorage.getItem("al_furqan_user")) || { name: "مدير" };
-        document.getElementById("username").innerText = currentUser.name;
-
-        /* 👉 تحميل الصفحات */
-        function loadPage(page) {
-            if (page === "users") {
-                fetch("users.html")
-                    .then(r => r.text())
-                    .then(html => document.getElementById("page-content").innerHTML = html);
-            }
-
-            if (page === "home") {
-                document.getElementById("page-content").innerHTML = "مرحباً بك في لوحة التحكم ✨";
-            }
-        }
-    </script>
-
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="dashboard-script.js"></script>
 </body>
 </html>
